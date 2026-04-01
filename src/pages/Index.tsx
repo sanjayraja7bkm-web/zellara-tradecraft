@@ -6,6 +6,7 @@ import StatsOverview from "@/components/StatsOverview";
 import TradeTable from "@/components/TradeTable";
 import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
+import CalendarHeatMap from "@/components/CalendarHeatMap";
 import { toast } from "sonner";
 
 type Tab = 'dashboard' | 'journal' | 'analytics';
