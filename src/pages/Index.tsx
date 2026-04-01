@@ -1,14 +1,15 @@
 import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Download, Upload, BarChart3, BookOpen, Activity } from "lucide-react";
+import { Plus, Download, Upload, BarChart3, BookOpen, Activity, CalendarDays } from "lucide-react";
 import { Trade, getTrades, saveTrades, addTrade, deleteTrade, updateTrade, calculateStats, exportTradesToCSV, importTradesFromCSV } from "@/lib/trades";
 import StatsOverview from "@/components/StatsOverview";
 import TradeTable from "@/components/TradeTable";
 import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
+import CalendarHeatMap from "@/components/CalendarHeatMap";
 import { toast } from "sonner";
 
-type Tab = 'dashboard' | 'journal' | 'analytics';
+type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar';
 
 export default function Index() {
   const [trades, setTrades] = useState<Trade[]>(getTrades);
@@ -73,6 +74,7 @@ export default function Index() {
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 size={16} /> },
     { id: 'journal', label: 'Journal', icon: <BookOpen size={16} /> },
     { id: 'analytics', label: 'Analytics', icon: <Activity size={16} /> },
+    { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
   ];
 
   return (
@@ -154,6 +156,9 @@ export default function Index() {
                 ))}
               </div>
             </div>
+          )}
+          {tab === 'calendar' && (
+            <CalendarHeatMap trades={trades} />
           )}
         </motion.div>
       </main>
