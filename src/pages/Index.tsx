@@ -157,6 +157,9 @@ export default function Index() {
               </div>
             </div>
           )}
+          {tab === 'calendar' && (
+            <CalendarHeatMap trades={trades} />
+          )}
         </motion.div>
       </main>
 
