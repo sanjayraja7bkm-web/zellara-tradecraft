@@ -74,6 +74,7 @@ export default function Index() {
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 size={16} /> },
     { id: 'journal', label: 'Journal', icon: <BookOpen size={16} /> },
     { id: 'analytics', label: 'Analytics', icon: <Activity size={16} /> },
+    { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={16} /> },
   ];
 
   return (
