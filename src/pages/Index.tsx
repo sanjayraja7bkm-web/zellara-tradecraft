@@ -9,7 +9,7 @@ import AddTradeModal from "@/components/AddTradeModal";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
 import { toast } from "sonner";
 
-type Tab = 'dashboard' | 'journal' | 'analytics';
+type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar';
 
 export default function Index() {
   const [trades, setTrades] = useState<Trade[]>(getTrades);
