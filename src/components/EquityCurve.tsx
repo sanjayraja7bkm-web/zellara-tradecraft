@@ -16,7 +16,7 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
-const springTransition = { duration: 0.5, ease: [0.16, 1, 0.3, 1] };
+const springTransition = { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] };
 
 export default function EquityCurve({ trades }: { trades: Trade[] }) {
   const data = getCumulativePnL(trades);
