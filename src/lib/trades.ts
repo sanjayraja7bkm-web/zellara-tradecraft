@@ -11,6 +11,7 @@ export interface Trade {
   notes: string;
   tags: string[];
   setup: string;
+  images: string[]; // base64 data URLs
 }
 
 export interface TradeStats {
@@ -136,6 +137,7 @@ export function importTradesFromCSV(csv: string): Trade[] {
       setup: parts[8] || '',
       tags: (parts[9] || '').split(';').filter(Boolean),
       notes: parts[10] || '',
+      images: [],
     };
   });
 }

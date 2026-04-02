@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Check } from "lucide-react";
+import { X, Plus, Check, ImagePlus, Trash2 } from "lucide-react";
 import { Trade } from "@/lib/trades";
 
 interface AddTradeModalProps {
@@ -11,13 +11,34 @@ interface AddTradeModalProps {
 }
 
 const defaultForm = {
-  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '',
+  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '', images: [] as string[],
 };
+
+function compressImage(file: File, maxWidth = 800): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ratio = Math.min(maxWidth / img.width, 1);
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddTradeModalProps) {
   const [form, setForm] = useState(() => editTrade ? {
-    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup,
+    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup, images: editTrade.images || [],
   } : defaultForm);
+  const imgRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,9 +54,21 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
       notes: form.notes,
       tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       setup: form.setup,
+      images: form.images,
     });
     setForm(defaultForm);
     onClose();
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const compressed = await Promise.all(files.map(f => compressImage(f)));
+    setForm(f => ({ ...f, images: [...f.images, ...compressed] }));
+    e.target.value = '';
+  };
+
+  const removeImage = (idx: number) => {
+    setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }));
   };
 
   const inputClass = "w-full px-4 py-3 rounded-xl bg-muted/60 border border-border/60 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:border-foreground/20 transition-all duration-200 placeholder:text-muted-foreground/40 font-mono";
@@ -99,6 +132,38 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
               <div><label className={labelClass}>Setup</label><input className={inputClass} placeholder="Breakout, Reversal..." value={form.setup} onChange={e => setForm(f => ({ ...f, setup: e.target.value }))} /></div>
               <div><label className={labelClass}>Tags</label><input className={inputClass} placeholder="swing, tech, earnings" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} /></div>
               <div><label className={labelClass}>Notes</label><textarea className={`${inputClass} resize-none h-20 font-sans`} placeholder="Trade notes..." value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} /></div>
+
+              {/* Image Upload Section */}
+              <div>
+                <label className={labelClass}>Chart Screenshots</label>
+                <input ref={imgRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
+                
+                {form.images.length > 0 && (
+                  <div className="flex gap-2 flex-wrap mb-3">
+                    {form.images.map((img, i) => (
+                      <div key={i} className="relative group w-20 h-14 rounded-lg overflow-hidden border border-border/40">
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(i)}
+                          className="absolute inset-0 bg-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                        >
+                          <Trash2 size={14} className="text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => imgRef.current?.click()}
+                  className="w-full py-3 rounded-xl border-2 border-dashed border-border/60 text-muted-foreground hover:text-foreground hover:border-foreground/20 hover:bg-muted/30 transition-all duration-200 flex items-center justify-center gap-2 text-sm"
+                >
+                  <ImagePlus size={16} />
+                  {form.images.length > 0 ? 'Add More Screenshots' : 'Attach Screenshots'}
+                </button>
+              </div>
 
               <button type="submit" className="w-full py-3.5 rounded-xl bg-foreground text-background font-medium text-sm hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2">
                 {editTrade ? <Check size={16} /> : <Plus size={16} />}
