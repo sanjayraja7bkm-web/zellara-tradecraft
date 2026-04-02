@@ -91,6 +91,7 @@ export default function Index() {
           </nav>
 
           <div className="flex items-center gap-1.5">
+            <ThemeToggle />
             <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleImport} />
             <button onClick={() => fileRef.current?.click()} className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200">
               <Upload size={14} /> Import
