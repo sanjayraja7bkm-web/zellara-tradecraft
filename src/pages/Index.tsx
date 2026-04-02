@@ -8,6 +8,7 @@ import TradeTable from "@/components/TradeTable";
 import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
+import TradeFilters, { TradeFilterState, defaultFilters, applyFilters } from "@/components/TradeFilters";
 import { toast } from "sonner";
 
 type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar';
@@ -40,6 +41,8 @@ export default function Index() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editTrade, setEditTrade] = useState<Trade | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [journalFilters, setJournalFilters] = useState<TradeFilterState>(defaultFilters);
+  const filteredTrades = applyFilters(trades, journalFilters);
 
   const stats = calculateStats(trades);
   const refresh = useCallback(() => setTrades(getTrades()), []);
@@ -144,9 +147,12 @@ export default function Index() {
           {tab === 'journal' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">All Trades · {trades.length}</h2>
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                  {filteredTrades.length === trades.length ? `All Trades · ${trades.length}` : `${filteredTrades.length} of ${trades.length} Trades`}
+                </h2>
               </div>
-              <TradeTable trades={trades} onDelete={handleDelete} onEdit={handleEdit} />
+              <TradeFilters filters={journalFilters} onChange={setJournalFilters} trades={trades} />
+              <TradeTable trades={filteredTrades} onDelete={handleDelete} onEdit={handleEdit} />
             </div>
           )}
           {tab === 'analytics' && (
