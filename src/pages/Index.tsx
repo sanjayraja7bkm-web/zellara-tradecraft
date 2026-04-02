@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
-import { Plus, Download, Upload, BarChart3, BookOpen, Activity, CalendarDays } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Plus, Download, Upload, BarChart3, BookOpen, Activity, CalendarDays, Sun, Moon } from "lucide-react";
 import { Trade, getTrades, saveTrades, addTrade, deleteTrade, updateTrade, calculateStats, exportTradesToCSV, importTradesFromCSV } from "@/lib/trades";
 import StatsOverview from "@/components/StatsOverview";
 import TradeTable from "@/components/TradeTable";
