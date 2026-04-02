@@ -147,9 +147,12 @@ export default function Index() {
           {tab === 'journal' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">All Trades · {trades.length}</h2>
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                  {filteredTrades.length === trades.length ? `All Trades · ${trades.length}` : `${filteredTrades.length} of ${trades.length} Trades`}
+                </h2>
               </div>
-              <TradeTable trades={trades} onDelete={handleDelete} onEdit={handleEdit} />
+              <TradeFilters filters={journalFilters} onChange={setJournalFilters} trades={trades} />
+              <TradeTable trades={filteredTrades} onDelete={handleDelete} onEdit={handleEdit} />
             </div>
           )}
           {tab === 'analytics' && (
