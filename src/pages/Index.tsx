@@ -41,6 +41,8 @@ export default function Index() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editTrade, setEditTrade] = useState<Trade | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [journalFilters, setJournalFilters] = useState<TradeFilterState>(defaultFilters);
+  const filteredTrades = applyFilters(trades, journalFilters);
 
   const stats = calculateStats(trades);
   const refresh = useCallback(() => setTrades(getTrades()), []);
