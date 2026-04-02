@@ -11,6 +11,7 @@ export interface Trade {
   notes: string;
   tags: string[];
   setup: string;
+  images: string[]; // base64 data URLs
 }
 
 export interface TradeStats {
