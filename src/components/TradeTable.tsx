@@ -31,7 +31,7 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
-                {['Date', 'Symbol', 'Side', 'Entry', 'Exit', 'Qty', 'Fees', 'P&L', 'Setup', 'Chart', ''].map(h => (
+                {['Date', 'Symbol', 'Side', 'Entry', 'SL', 'Exit', 'Qty', 'P&L', 'R:R', 'Setup', 'Chart', ''].map(h => (
                   <th key={h} className="px-5 py-3.5 text-left text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">{h}</th>
                 ))}
               </tr>
