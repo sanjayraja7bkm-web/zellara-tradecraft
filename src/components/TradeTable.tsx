@@ -63,11 +63,14 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
                         </span>
                       </td>
                       <td className="px-5 py-4 font-mono text-sm">${trade.entryPrice.toFixed(2)}</td>
+                      <td className="px-5 py-4 font-mono text-sm text-muted-foreground">{trade.stopLoss ? `$${trade.stopLoss.toFixed(2)}` : '—'}</td>
                       <td className="px-5 py-4 font-mono text-sm">${trade.exitPrice.toFixed(2)}</td>
                       <td className="px-5 py-4 font-mono text-sm">{trade.quantity}</td>
-                      <td className="px-5 py-4 font-mono text-sm text-muted-foreground">${trade.fees.toFixed(2)}</td>
                       <td className={`px-5 py-4 font-mono text-sm font-semibold ${isWin ? 'text-profit' : 'text-loss'}`}>
                         {isWin ? '+' : ''}{pnl.toFixed(2)}
+                      </td>
+                      <td className={`px-5 py-4 font-mono text-xs font-medium ${rr !== null ? (rr >= 0 ? 'text-profit' : 'text-loss') : 'text-muted-foreground'}`}>
+                        {rr !== null ? `${rr.toFixed(1)}R` : '—'}
                       </td>
                       <td className="px-5 py-4 text-xs text-muted-foreground">{trade.setup}</td>
                       <td className="px-5 py-4">

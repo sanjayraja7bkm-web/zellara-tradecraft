@@ -160,13 +160,18 @@ export default function Index() {
             <div className="space-y-6">
               <StatsOverview stats={stats} />
               <EquityCurve trades={trades} />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {[
-                  { label: 'Largest Win', value: `$${stats.largestWin.toFixed(2)}`, type: 'profit' as const },
-                  { label: 'Largest Loss', value: `$${stats.largestLoss.toFixed(2)}`, type: 'loss' as const },
-                  { label: 'Win Streak', value: stats.winStreak, type: 'profit' as const },
-                  { label: 'Lose Streak', value: stats.loseStreak, type: 'loss' as const },
-                ].map((s, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {(() => {
+                  const rrs = trades.map(getRiskReward).filter((r): r is number => r !== null);
+                  const avgRR = rrs.length ? rrs.reduce((a, b) => a + b, 0) / rrs.length : 0;
+                  return [
+                    { label: 'Largest Win', value: `$${stats.largestWin.toFixed(2)}`, type: 'profit' as const },
+                    { label: 'Largest Loss', value: `$${stats.largestLoss.toFixed(2)}`, type: 'loss' as const },
+                    { label: 'Avg R:R', value: `${avgRR.toFixed(2)}R`, type: (avgRR >= 1 ? 'profit' : 'loss') as 'profit' | 'loss' },
+                    { label: 'Win Streak', value: stats.winStreak, type: 'profit' as const },
+                    { label: 'Lose Streak', value: stats.loseStreak, type: 'loss' as const },
+                  ];
+                })().map((s, i) => (
                   <motion.div key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.04, ease: [0.16, 1, 0.3, 1] }} className="surface-card p-5">
                     <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground mb-2">{s.label}</p>
                     <p className={`text-2xl font-semibold font-mono tracking-tight ${s.type === 'profit' ? 'text-profit' : 'text-loss'}`}>{s.value}</p>

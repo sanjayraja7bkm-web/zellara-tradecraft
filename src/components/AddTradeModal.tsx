@@ -115,8 +115,9 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div><label className={labelClass}>Entry Price</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.entryPrice} onChange={e => setForm(f => ({ ...f, entryPrice: e.target.value }))} required /></div>
+                <div><label className={labelClass}>Stop Loss</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.stopLoss} onChange={e => setForm(f => ({ ...f, stopLoss: e.target.value }))} /></div>
                 <div><label className={labelClass}>Exit Price</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.exitPrice} onChange={e => setForm(f => ({ ...f, exitPrice: e.target.value }))} required /></div>
               </div>
 

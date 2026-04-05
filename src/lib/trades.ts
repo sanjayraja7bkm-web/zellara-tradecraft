@@ -114,9 +114,9 @@ export function calculateStats(trades: Trade[]): TradeStats {
 }
 
 export function exportTradesToCSV(trades: Trade[]): string {
-  const headers = ['Symbol', 'Direction', 'Entry Price', 'Exit Price', 'Quantity', 'Entry Date', 'Exit Date', 'Fees', 'Setup', 'Tags', 'Notes', 'P&L'];
+  const headers = ['Symbol', 'Direction', 'Entry Price', 'Exit Price', 'Quantity', 'Entry Date', 'Exit Date', 'Fees', 'Setup', 'Tags', 'Notes', 'P&L', 'Stop Loss'];
   const rows = trades.map(t => [
-    t.symbol, t.direction, t.entryPrice, t.exitPrice, t.quantity, t.entryDate, t.exitDate, t.fees, t.setup, t.tags.join(';'), `"${t.notes.replace(/"/g, '""')}"`, getPnL(t).toFixed(2)
+    t.symbol, t.direction, t.entryPrice, t.exitPrice, t.quantity, t.entryDate, t.exitDate, t.fees, t.setup, t.tags.join(';'), `"${t.notes.replace(/"/g, '""')}"`, getPnL(t).toFixed(2), t.stopLoss || 0
   ]);
   return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
 }
