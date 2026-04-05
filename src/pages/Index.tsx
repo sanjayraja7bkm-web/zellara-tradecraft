@@ -173,6 +173,7 @@ export default function Index() {
                   </motion.div>
                 ))}
               </div>
+              <PerformanceBreakdown trades={trades} />
             </div>
           )}
           {tab === 'calendar' && (
