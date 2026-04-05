@@ -4,6 +4,7 @@ export interface Trade {
   direction: 'LONG' | 'SHORT';
   entryPrice: number;
   exitPrice: number;
+  stopLoss: number;
   quantity: number;
   entryDate: string;
   exitDate: string;
@@ -12,6 +13,16 @@ export interface Trade {
   tags: string[];
   setup: string;
   images: string[]; // base64 data URLs
+}
+
+export function getRiskReward(trade: Trade): number | null {
+  if (!trade.stopLoss || trade.stopLoss === 0) return null;
+  const risk = Math.abs(trade.entryPrice - trade.stopLoss);
+  if (risk === 0) return null;
+  const reward = trade.direction === 'LONG'
+    ? trade.exitPrice - trade.entryPrice
+    : trade.entryPrice - trade.exitPrice;
+  return reward / risk;
 }
 
 export interface TradeStats {
