@@ -141,6 +141,7 @@ export function importTradesFromCSV(csv: string): Trade[] {
       direction: (parts[1] || 'LONG') as 'LONG' | 'SHORT',
       entryPrice: parseFloat(parts[2]) || 0,
       exitPrice: parseFloat(parts[3]) || 0,
+      stopLoss: parseFloat(parts[12]) || 0,
       quantity: parseFloat(parts[4]) || 0,
       entryDate: parts[5] || new Date().toISOString().split('T')[0],
       exitDate: parts[6] || new Date().toISOString().split('T')[0],
