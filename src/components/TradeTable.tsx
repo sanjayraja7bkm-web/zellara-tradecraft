@@ -40,6 +40,7 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
               <AnimatePresence>
                 {sorted.map((trade, i) => {
                   const pnl = getPnL(trade);
+                  const rr = getRiskReward(trade);
                   const isWin = pnl >= 0;
                   const images = trade.images || [];
                   return (
