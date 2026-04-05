@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Edit2, TrendingUp, TrendingDown, BarChart } from "lucide-react";
-import { Trade, getPnL } from "@/lib/trades";
+import { Trade, getPnL, getRiskReward } from "@/lib/trades";
 import ImageGallery, { ImageThumbnail } from "@/components/ImageGallery";
 
 interface TradeTableProps {
