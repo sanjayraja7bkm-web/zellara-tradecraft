@@ -47,6 +47,7 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
       direction: form.direction,
       entryPrice: parseFloat(form.entryPrice) || 0,
       exitPrice: parseFloat(form.exitPrice) || 0,
+      stopLoss: parseFloat(form.stopLoss) || 0,
       quantity: parseFloat(form.quantity) || 0,
       entryDate: form.entryDate,
       exitDate: form.exitDate,
