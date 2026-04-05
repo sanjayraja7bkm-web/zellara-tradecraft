@@ -11,7 +11,7 @@ interface AddTradeModalProps {
 }
 
 const defaultForm = {
-  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '', images: [] as string[],
+  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', stopLoss: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '', images: [] as string[],
 };
 
 function compressImage(file: File, maxWidth = 800): Promise<string> {
