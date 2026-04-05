@@ -36,7 +36,7 @@ function compressImage(file: File, maxWidth = 800): Promise<string> {
 
 export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddTradeModalProps) {
   const [form, setForm] = useState(() => editTrade ? {
-    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup, images: editTrade.images || [],
+    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), stopLoss: String(editTrade.stopLoss || ''), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup, images: editTrade.images || [],
   } : defaultForm);
   const imgRef = useRef<HTMLInputElement>(null);
 
