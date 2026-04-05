@@ -8,6 +8,7 @@ import TradeTable from "@/components/TradeTable";
 import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
+import PerformanceBreakdown from "@/components/PerformanceBreakdown";
 import TradeFilters, { TradeFilterState, defaultFilters, applyFilters } from "@/components/TradeFilters";
 import { toast } from "sonner";
 
@@ -172,6 +173,7 @@ export default function Index() {
                   </motion.div>
                 ))}
               </div>
+              <PerformanceBreakdown trades={trades} />
             </div>
           )}
           {tab === 'calendar' && (
