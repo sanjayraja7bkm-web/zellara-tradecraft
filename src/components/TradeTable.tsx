@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Edit2, TrendingUp, TrendingDown, BarChart } from "lucide-react";
-import { Trade, getPnL } from "@/lib/trades";
+import { Trade, getPnL, getRiskReward } from "@/lib/trades";
 import ImageGallery, { ImageThumbnail } from "@/components/ImageGallery";
 
 interface TradeTableProps {
@@ -31,7 +31,7 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
-                {['Date', 'Symbol', 'Side', 'Entry', 'Exit', 'Qty', 'Fees', 'P&L', 'Setup', 'Chart', ''].map(h => (
+                {['Date', 'Symbol', 'Side', 'Entry', 'SL', 'Exit', 'Qty', 'P&L', 'R:R', 'Setup', 'Chart', ''].map(h => (
                   <th key={h} className="px-5 py-3.5 text-left text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">{h}</th>
                 ))}
               </tr>
@@ -40,6 +40,7 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
               <AnimatePresence>
                 {sorted.map((trade, i) => {
                   const pnl = getPnL(trade);
+                  const rr = getRiskReward(trade);
                   const isWin = pnl >= 0;
                   const images = trade.images || [];
                   return (
@@ -62,11 +63,14 @@ export default function TradeTable({ trades, onDelete, onEdit }: TradeTableProps
                         </span>
                       </td>
                       <td className="px-5 py-4 font-mono text-sm">${trade.entryPrice.toFixed(2)}</td>
+                      <td className="px-5 py-4 font-mono text-sm text-muted-foreground">{trade.stopLoss ? `$${trade.stopLoss.toFixed(2)}` : '—'}</td>
                       <td className="px-5 py-4 font-mono text-sm">${trade.exitPrice.toFixed(2)}</td>
                       <td className="px-5 py-4 font-mono text-sm">{trade.quantity}</td>
-                      <td className="px-5 py-4 font-mono text-sm text-muted-foreground">${trade.fees.toFixed(2)}</td>
                       <td className={`px-5 py-4 font-mono text-sm font-semibold ${isWin ? 'text-profit' : 'text-loss'}`}>
                         {isWin ? '+' : ''}{pnl.toFixed(2)}
+                      </td>
+                      <td className={`px-5 py-4 font-mono text-xs font-medium ${rr !== null ? (rr >= 0 ? 'text-profit' : 'text-loss') : 'text-muted-foreground'}`}>
+                        {rr !== null ? `${rr.toFixed(1)}R` : '—'}
                       </td>
                       <td className="px-5 py-4 text-xs text-muted-foreground">{trade.setup}</td>
                       <td className="px-5 py-4">

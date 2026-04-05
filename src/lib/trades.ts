@@ -4,6 +4,7 @@ export interface Trade {
   direction: 'LONG' | 'SHORT';
   entryPrice: number;
   exitPrice: number;
+  stopLoss: number;
   quantity: number;
   entryDate: string;
   exitDate: string;
@@ -12,6 +13,16 @@ export interface Trade {
   tags: string[];
   setup: string;
   images: string[]; // base64 data URLs
+}
+
+export function getRiskReward(trade: Trade): number | null {
+  if (!trade.stopLoss || trade.stopLoss === 0) return null;
+  const risk = Math.abs(trade.entryPrice - trade.stopLoss);
+  if (risk === 0) return null;
+  const reward = trade.direction === 'LONG'
+    ? trade.exitPrice - trade.entryPrice
+    : trade.entryPrice - trade.exitPrice;
+  return reward / risk;
 }
 
 export interface TradeStats {
@@ -103,9 +114,9 @@ export function calculateStats(trades: Trade[]): TradeStats {
 }
 
 export function exportTradesToCSV(trades: Trade[]): string {
-  const headers = ['Symbol', 'Direction', 'Entry Price', 'Exit Price', 'Quantity', 'Entry Date', 'Exit Date', 'Fees', 'Setup', 'Tags', 'Notes', 'P&L'];
+  const headers = ['Symbol', 'Direction', 'Entry Price', 'Exit Price', 'Quantity', 'Entry Date', 'Exit Date', 'Fees', 'Setup', 'Tags', 'Notes', 'P&L', 'Stop Loss'];
   const rows = trades.map(t => [
-    t.symbol, t.direction, t.entryPrice, t.exitPrice, t.quantity, t.entryDate, t.exitDate, t.fees, t.setup, t.tags.join(';'), `"${t.notes.replace(/"/g, '""')}"`, getPnL(t).toFixed(2)
+    t.symbol, t.direction, t.entryPrice, t.exitPrice, t.quantity, t.entryDate, t.exitDate, t.fees, t.setup, t.tags.join(';'), `"${t.notes.replace(/"/g, '""')}"`, getPnL(t).toFixed(2), t.stopLoss || 0
   ]);
   return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
 }
@@ -130,6 +141,7 @@ export function importTradesFromCSV(csv: string): Trade[] {
       direction: (parts[1] || 'LONG') as 'LONG' | 'SHORT',
       entryPrice: parseFloat(parts[2]) || 0,
       exitPrice: parseFloat(parts[3]) || 0,
+      stopLoss: parseFloat(parts[12]) || 0,
       quantity: parseFloat(parts[4]) || 0,
       entryDate: parts[5] || new Date().toISOString().split('T')[0],
       exitDate: parts[6] || new Date().toISOString().split('T')[0],

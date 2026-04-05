@@ -11,7 +11,7 @@ interface AddTradeModalProps {
 }
 
 const defaultForm = {
-  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '', images: [] as string[],
+  symbol: '', direction: 'LONG' as const, entryPrice: '', exitPrice: '', stopLoss: '', quantity: '', entryDate: new Date().toISOString().split('T')[0], exitDate: new Date().toISOString().split('T')[0], fees: '0', notes: '', tags: '', setup: '', images: [] as string[],
 };
 
 function compressImage(file: File, maxWidth = 800): Promise<string> {
@@ -36,7 +36,7 @@ function compressImage(file: File, maxWidth = 800): Promise<string> {
 
 export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddTradeModalProps) {
   const [form, setForm] = useState(() => editTrade ? {
-    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup, images: editTrade.images || [],
+    symbol: editTrade.symbol, direction: editTrade.direction, entryPrice: String(editTrade.entryPrice), exitPrice: String(editTrade.exitPrice), stopLoss: String(editTrade.stopLoss || ''), quantity: String(editTrade.quantity), entryDate: editTrade.entryDate, exitDate: editTrade.exitDate, fees: String(editTrade.fees), notes: editTrade.notes, tags: editTrade.tags.join(', '), setup: editTrade.setup, images: editTrade.images || [],
   } : defaultForm);
   const imgRef = useRef<HTMLInputElement>(null);
 
@@ -47,6 +47,7 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
       direction: form.direction,
       entryPrice: parseFloat(form.entryPrice) || 0,
       exitPrice: parseFloat(form.exitPrice) || 0,
+      stopLoss: parseFloat(form.stopLoss) || 0,
       quantity: parseFloat(form.quantity) || 0,
       entryDate: form.entryDate,
       exitDate: form.exitDate,
@@ -114,8 +115,9 @@ export default function AddTradeModal({ open, onClose, onSave, editTrade }: AddT
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div><label className={labelClass}>Entry Price</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.entryPrice} onChange={e => setForm(f => ({ ...f, entryPrice: e.target.value }))} required /></div>
+                <div><label className={labelClass}>Stop Loss</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.stopLoss} onChange={e => setForm(f => ({ ...f, stopLoss: e.target.value }))} /></div>
                 <div><label className={labelClass}>Exit Price</label><input type="number" step="any" className={inputClass} placeholder="0.00" value={form.exitPrice} onChange={e => setForm(f => ({ ...f, exitPrice: e.target.value }))} required /></div>
               </div>
 
