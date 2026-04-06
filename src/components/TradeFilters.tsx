@@ -30,27 +30,19 @@ export const defaultFilters: TradeFilterState = {
 export function applyFilters(trades: Trade[], filters: TradeFilterState): Trade[] {
   return trades.filter(t => {
     const pnl = getPnL(t);
-
     if (filters.search) {
       const q = filters.search.toLowerCase();
       if (!t.symbol.toLowerCase().includes(q) && !t.setup.toLowerCase().includes(q) && !t.notes.toLowerCase().includes(q) && !t.tags.some(tag => tag.toLowerCase().includes(q))) return false;
     }
-
     if (filters.direction !== 'ALL' && t.direction !== filters.direction) return false;
-
     if (filters.dateFrom && t.exitDate < filters.dateFrom) return false;
     if (filters.dateTo && t.exitDate > filters.dateTo) return false;
-
     if (filters.setup && t.setup.toLowerCase() !== filters.setup.toLowerCase()) return false;
-
     if (filters.tags.length > 0 && !filters.tags.some(ft => t.tags.some(tt => tt.toLowerCase() === ft.toLowerCase()))) return false;
-
     if (filters.pnlMin && pnl < parseFloat(filters.pnlMin)) return false;
     if (filters.pnlMax && pnl > parseFloat(filters.pnlMax)) return false;
-
     if (filters.result === 'WIN' && pnl <= 0) return false;
     if (filters.result === 'LOSS' && pnl >= 0) return false;
-
     return true;
   });
 }
@@ -87,7 +79,6 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
 
   return (
     <div className="space-y-3">
-      {/* Search bar + filter toggle */}
       <div className="flex items-center gap-2">
         <div className="flex-1 relative">
           <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
@@ -95,7 +86,7 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
             type="text"
             value={filters.search}
             onChange={e => update({ search: e.target.value })}
-            placeholder="Search symbol, setup, notes, tags..."
+            placeholder="Search..."
             className={`${inputClass} pl-9`}
           />
           {filters.search && (
@@ -106,26 +97,25 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
         </div>
         <button
           onClick={() => setExpanded(!expanded)}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shrink-0 ${
             active ? 'bg-foreground text-background' : 'bg-muted/60 border border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted'
           }`}
         >
           <SlidersHorizontal size={14} />
-          Filters
-          {activeCount > 0 && <span className="text-[11px] ml-0.5">({activeCount})</span>}
+          <span className="hidden sm:inline">Filters</span>
+          {activeCount > 0 && <span className="text-[11px]">({activeCount})</span>}
           <ChevronDown size={12} className={`transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
         </button>
         {active && (
           <button
             onClick={() => onChange(defaultFilters)}
-            className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+            className="px-2.5 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200 shrink-0"
           >
-            Clear
+            <X size={14} />
           </button>
         )}
       </div>
 
-      {/* Expanded filter panel */}
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -135,9 +125,8 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="surface-card p-5 space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Direction */}
+            <div className="surface-card p-4 md:p-5 space-y-3 md:space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div>
                   <p className={labelClass}>Direction</p>
                   <div className="flex gap-1">
@@ -145,7 +134,7 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                       <button
                         key={d}
                         onClick={() => update({ direction: d })}
-                        className={`flex-1 py-1.5 rounded-lg text-[12px] font-medium transition-all duration-200 ${
+                        className={`flex-1 py-1.5 rounded-lg text-[11px] md:text-[12px] font-medium transition-all duration-200 ${
                           filters.direction === d
                             ? 'bg-foreground text-background'
                             : 'bg-muted/60 text-muted-foreground hover:bg-muted'
@@ -157,7 +146,6 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                   </div>
                 </div>
 
-                {/* Result */}
                 <div>
                   <p className={labelClass}>Result</p>
                   <div className="flex gap-1">
@@ -165,7 +153,7 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                       <button
                         key={r}
                         onClick={() => update({ result: r })}
-                        className={`flex-1 py-1.5 rounded-lg text-[12px] font-medium transition-all duration-200 ${
+                        className={`flex-1 py-1.5 rounded-lg text-[11px] md:text-[12px] font-medium transition-all duration-200 ${
                           filters.result === r
                             ? (r === 'WIN' ? 'bg-profit text-white' : r === 'LOSS' ? 'bg-loss text-white' : 'bg-foreground text-background')
                             : 'bg-muted/60 text-muted-foreground hover:bg-muted'
@@ -177,21 +165,18 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                   </div>
                 </div>
 
-                {/* Date From */}
                 <div>
                   <p className={labelClass}>Date From</p>
                   <input type="date" value={filters.dateFrom} onChange={e => update({ dateFrom: e.target.value })} className={inputClass} />
                 </div>
 
-                {/* Date To */}
                 <div>
                   <p className={labelClass}>Date To</p>
                   <input type="date" value={filters.dateTo} onChange={e => update({ dateTo: e.target.value })} className={inputClass} />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Setup */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div>
                   <p className={labelClass}>Setup</p>
                   <select value={filters.setup} onChange={e => update({ setup: e.target.value })} className={inputClass}>
@@ -200,7 +185,6 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                   </select>
                 </div>
 
-                {/* Tags */}
                 <div>
                   <p className={labelClass}>Tags</p>
                   <div className="flex flex-wrap gap-1">
@@ -222,7 +206,6 @@ export default function TradeFilters({ filters, onChange, trades }: TradeFilters
                   </div>
                 </div>
 
-                {/* P&L Range */}
                 <div>
                   <p className={labelClass}>P&L Min</p>
                   <input type="number" step="any" value={filters.pnlMin} onChange={e => update({ pnlMin: e.target.value })} placeholder="-∞" className={inputClass} />
