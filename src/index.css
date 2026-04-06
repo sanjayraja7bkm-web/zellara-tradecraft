@@ -170,4 +170,7 @@
   .surface-inset {
     @apply bg-muted/60 rounded-xl;
   }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
