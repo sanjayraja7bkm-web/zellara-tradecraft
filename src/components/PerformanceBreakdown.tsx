@@ -124,6 +124,16 @@ export default function PerformanceBreakdown({ trades }: { trades: Trade[] }) {
               }}
               formatter={(value: number) => [`$${value.toFixed(2)}`, 'P&L']}
             />
+            <Tooltip cursor={{ fill: 'hsl(var(--muted) / 0.5)' }}
+              contentStyle={{
+                background: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '12px',
+                fontSize: '12px',
+                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.12)',
+              }}
+              formatter={(value: number) => [`$${value.toFixed(2)}`, 'P&L']}
+            />
             <Bar dataKey="totalPnL" radius={[6, 6, 0, 0]} maxBarSize={48}>
               {data.map((entry, i) => (
                 <Cell key={i} fill={entry.totalPnL >= 0 ? 'hsl(var(--profit))' : 'hsl(var(--loss))'} />
