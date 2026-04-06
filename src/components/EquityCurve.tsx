@@ -83,7 +83,7 @@ export default function EquityCurve({ trades }: { trades: Trade[] }) {
           <BarChart data={dailyPnL}>
             <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'hsl(0, 0%, 46%)' }} tickLine={false} axisLine={false} />
             <YAxis tick={{ fontSize: 10, fill: 'hsl(0, 0%, 46%)' }} tickLine={false} axisLine={false} tickFormatter={v => `$${v}`} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip cursor={{ fill: 'hsl(var(--muted) / 0.4)' }} content={<CustomTooltip />} />
             <Bar dataKey="pnl" name="P&L" radius={[6, 6, 0, 0]}>
               {dailyPnL.map((d, i) => <Cell key={i} fill={d.pnl >= 0 ? 'hsl(152, 60%, 40%)' : 'hsl(0, 60%, 52%)'} />)}
             </Bar>
