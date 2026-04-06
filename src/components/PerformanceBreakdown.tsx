@@ -115,6 +115,7 @@ export default function PerformanceBreakdown({ trades }: { trades: Trade[] }) {
               tickFormatter={v => `$${v}`}
             />
             <Tooltip
+              cursor={{ fill: 'hsl(var(--muted) / 0.4)' }}
               contentStyle={{
                 background: 'hsl(var(--card))',
                 border: '1px solid hsl(var(--border))',
