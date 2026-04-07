@@ -91,6 +91,7 @@ export default function Index() {
     { id: 'journal', label: 'Journal', icon: <BookOpen size={isMobile ? 20 : 15} /> },
     { id: 'analytics', label: 'Analytics', icon: <Activity size={isMobile ? 20 : 15} /> },
     { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={isMobile ? 20 : 15} /> },
+    { id: 'tools', label: 'Tools', icon: <Calculator size={isMobile ? 20 : 15} /> },
   ];
 
   return (
