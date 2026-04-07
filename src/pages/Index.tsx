@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
-import { Plus, Download, Upload, BarChart3, BookOpen, Activity, CalendarDays, Sun, Moon, MoreHorizontal } from "lucide-react";
+import { Plus, Download, Upload, BarChart3, BookOpen, Activity, CalendarDays, Sun, Moon, MoreHorizontal, Calculator } from "lucide-react";
 import { Trade, getTrades, saveTrades, addTrade, deleteTrade, updateTrade, calculateStats, exportTradesToCSV, importTradesFromCSV, getRiskReward } from "@/lib/trades";
 import StatsOverview from "@/components/StatsOverview";
 import TradeTable from "@/components/TradeTable";
@@ -9,12 +9,13 @@ import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
 import PerformanceBreakdown from "@/components/PerformanceBreakdown";
+import PositionSizer from "@/components/PositionSizer";
 import TradeFilters, { TradeFilterState, defaultFilters, applyFilters } from "@/components/TradeFilters";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar';
+type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar' | 'tools';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -90,6 +91,7 @@ export default function Index() {
     { id: 'journal', label: 'Journal', icon: <BookOpen size={isMobile ? 20 : 15} /> },
     { id: 'analytics', label: 'Analytics', icon: <Activity size={isMobile ? 20 : 15} /> },
     { id: 'calendar', label: 'Calendar', icon: <CalendarDays size={isMobile ? 20 : 15} /> },
+    { id: 'tools', label: 'Tools', icon: <Calculator size={isMobile ? 20 : 15} /> },
   ];
 
   return (
@@ -226,6 +228,9 @@ export default function Index() {
           )}
           {tab === 'calendar' && (
             <CalendarHeatMap trades={trades} />
+          )}
+          {tab === 'tools' && (
+            <PositionSizer />
           )}
         </motion.div>
       </main>
