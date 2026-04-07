@@ -232,7 +232,6 @@ export default function Index() {
           {tab === 'tools' && (
             <PositionSizer />
           )}
-          )}
         </motion.div>
       </main>
 
