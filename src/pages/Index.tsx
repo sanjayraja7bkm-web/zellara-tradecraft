@@ -9,6 +9,7 @@ import EquityCurve from "@/components/EquityCurve";
 import AddTradeModal from "@/components/AddTradeModal";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
 import PerformanceBreakdown from "@/components/PerformanceBreakdown";
+import PositionSizer from "@/components/PositionSizer";
 import TradeFilters, { TradeFilterState, defaultFilters, applyFilters } from "@/components/TradeFilters";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
