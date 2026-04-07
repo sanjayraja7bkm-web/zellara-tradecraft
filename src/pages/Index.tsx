@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar';
+type Tab = 'dashboard' | 'journal' | 'analytics' | 'calendar' | 'tools';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
