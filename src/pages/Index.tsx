@@ -229,6 +229,10 @@ export default function Index() {
           {tab === 'calendar' && (
             <CalendarHeatMap trades={trades} />
           )}
+          {tab === 'tools' && (
+            <PositionSizer />
+          )}
+          )}
         </motion.div>
       </main>
 
