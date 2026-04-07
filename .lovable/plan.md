@@ -1,32 +1,41 @@
 
 
-## Position Sizing Calculator
+## Add Leverage & Forex/XAUUSD Lot Calculations to Position Sizer
 
-### What We're Building
-A new "Tools" tab (or adding to an existing tab) with a built-in position sizing calculator. The user enters account size, risk percentage, entry price, and stop loss -- the calculator instantly shows position size (shares/units), dollar risk, and potential reward targets.
+### What Changes
 
-### Plan
+**1. Add Instrument Type selector** (Stock / Forex / XAUUSD)
+- Segmented toggle at the top alongside the Long/Short toggle
+- Each instrument type changes how position size is calculated and displayed
 
-**1. Create `src/components/PositionSizer.tsx`**
-- Clean card-based UI with 4 input fields: Account Size, Risk %, Entry Price, Stop Loss
-- Real-time calculation (no submit button needed) showing:
-  - **Risk per share** = |Entry - Stop Loss|
-  - **Dollar risk** = Account Size x Risk%
-  - **Position size** = Dollar Risk / Risk per share
-  - **Total position value** = Position Size x Entry Price
-- Optional: direction toggle (Long/Short) and take-profit field to show R:R preview
-- Smooth number animations using framer-motion
-- Apple-inspired minimal styling matching existing `surface-card` pattern
+**2. Add Leverage input field**
+- New input in Trade Parameters section (default: 1x for stocks, 100x for forex)
+- Leverage reduces required margin: `margin = totalValue / leverage`
+- Show "Required Margin" in results
 
-**2. Add a "Tools" tab to `src/pages/Index.tsx`**
-- New tab with a wrench/calculator icon alongside Dashboard, Journal, Analytics, Calendar
-- Update the `Tab` type and `tabs` array
-- Render `PositionSizer` inside the tools tab content
-- Update mobile bottom nav to include the new tab
+**3. Forex lot size calculation**
+- Standard forex: 1 lot = 100,000 units of base currency
+- `pipValue` based on pair type (JPY pairs = 0.01, others = 0.0001)
+- `lotSize = dollarRisk / (slPips * pipValuePerLot)`
+- Display result in **lots** (+ mini lots & micro lots breakdown)
 
-### Design Notes
-- All calculations are instant (onChange), no form submission
-- Input validation: prevent negative values, zero stop loss distance
-- Results animate in smoothly with motion transitions
-- Responsive: stacks vertically on mobile, 2-column grid on desktop
+**4. XAUUSD (Gold) specific calculation**
+- 1 lot = 100 oz, pip = $0.01, so $1 move = $100/lot
+- `lotSize = dollarRisk / (slPoints * 100)`
+- Display in lots with point-based risk
+
+**5. Updated results display**
+- Stocks: show shares (current behavior) + required margin with leverage
+- Forex: show lots / mini lots / micro lots + pip risk + margin
+- XAUUSD: show lots + point risk + margin
+
+### File Changes
+
+**`src/components/PositionSizer.tsx`** — single file edit:
+- Add `instrumentType` state: `'stock' | 'forex' | 'xauusd'`
+- Add `leverage` state (string, default varies by instrument)
+- Add instrument selector UI (segmented control matching existing style)
+- Add leverage input field in the parameters card
+- Refactor `calc` useMemo to branch by instrument type
+- Update results section to show lots instead of shares for forex/gold, add margin display
 
